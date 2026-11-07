@@ -47,6 +47,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 				<dialog-name>pushback</dialog-name>
 			</binding>
 		</item>
+		<item n="4">
+			<label>Gunsight (install / remove)</label>
+			<binding>
+				<command>nasal</command>
+				<script>
+				var on = !getprop("/sim/model/c101/sight");
+				setprop("/sim/model/c101/sight", on);
+				gui.popupTip(on ? "Mira instalada" : "Mira removida", 3);
+				</script>
+			</binding>
+		</item>
 	</menu>
 </default>
 

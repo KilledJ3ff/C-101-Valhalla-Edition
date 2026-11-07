@@ -4,6 +4,9 @@
     CASA C-101_Aviojet for FlightGear flight simulator
     Copyright (C) 2013  Pavel Cueto, Fernando Espinosa
 
+    C-101BB: célula/cockpit atualizados + detalhes externos, canhão DEFA 553
+    e motor Garrett TFE731-3.
+
 This program is free software; you can redistribute it and/or modify 
 it under the terms of the GNU General Public License as published by 
 the Free Software Foundation; either version 3 of the License, or 
@@ -22,13 +25,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <PropertyList include="C-101-base.xml">
 
 <sim>
-	<author>Pavel Cueto, Fernando Espinosa</author>
+	<author>Pavel Cueto, Fernando Espinosa, John Bray (Warty), Killed J3ff</author>
 	<description>CASA C-101BB Aviojet (Garrett TFE731-3 engine)</description>
-	<aircraft-version>22/05/2013</aircraft-version>
+	<variant-of>1977_C-101EB</variant-of>
+	<variant-id type="int">2</variant-id>
+	<previews>
+		<preview>
+			<type>exterior</type>
+			<path>C-101BB-splash.png</path>
+		</preview>
+	</previews>
+	<aircraft-version>28/10/2026</aircraft-version>
 	<flight-model>jsb</flight-model>
 	<aero>C-101BB-JSBSim</aero>
 	<model>
 		<path archive="y">Aircraft/C-101/Models/CASA_C-101BB.xml</path>
+		<c101>
+			<sight type="bool">true</sight>
+		</c101>
 	</model>
 	<startup>
 		<splash-texture>Aircraft/C-101/C-101BB-splash.png</splash-texture>
@@ -36,24 +50,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	<sound>
 		<path>Aircraft/C-101/Sounds/C-101BBCC-sounds.xml</path>
 	</sound>
+	<multiplay>
+		<generic>
+			<int n="10" alias="/controls/armament/trigger"/>
+			<float n="0" alias="/controls/door[0]"/>
+			<float n="1" alias="/controls/door[1]"/>
+			<float n="2" alias="/controls/door[2]"/>
+		</generic>
+	</multiplay>
 	<menubar include="Dialogs/C-101BB-menu.xml"/>
 	<help include="Dialogs/C-101BB-help.xml"/>
-	<submodels> 
+	<submodels>
 		<serviceable type="bool">true</serviceable>
 		<path>Aircraft/C-101/Systems/Submodels.xml</path>
 	</submodels>
-	<multiplay>
-		<generic>
-			<string n="9" type="string"/>
-			<string n="10" alias="controls/armament/trigger" />
-		</generic>
-	</multiplay>
 </sim>
 
 <nasal>
 	<C-101>
 		<file>Aircraft/C-101/Nasal/Liveries-C-101BB.nas</file>
 	</C-101>
+	<canvas_test>
+		<file>Aircraft/C-101/Models/Canvas_NAV1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_COM1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_N1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_N2.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_ITT.nas</file>
+	</canvas_test>
 </nasal>
 
 <input>
@@ -71,7 +94,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 					<command>property-assign</command>
 					<property>controls/armament/trigger</property>
 					<value>false</value>
-				</binding> 
+				</binding>
 			</mod-up>
 		</key>
 	</keyboard>

@@ -22,9 +22,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <PropertyList include="C-101-base.xml">
 
 <sim>
-	<author>Pavel Cueto, Fernando Espinosa</author>
+	<author>Pavel Cueto, Fernando Espinosa, John Bray (Warty), Killed J3ff</author>
 	<description>CASA C-101EB Aviojet (Garrett TFE731-2 engine)</description>
-	<aircraft-version>22/05/2013</aircraft-version>
+	<variant-id type="int">1</variant-id>
+	<previews>
+		<preview>
+			<type>exterior</type>
+			<path>C-101EB-splash.png</path>
+		</preview>
+	</previews>
+	<aircraft-version>28/10/2026</aircraft-version>
 	<flight-model>jsb</flight-model>
 	<aero>C-101EB-JSBSim</aero>
 	<model>
@@ -39,6 +46,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	<multiplay>
 		<generic>
 			<int n="11" alias="/controls/armament/smoke"/>
+			<float n="0" alias="/controls/door[0]"/>
+			<float n="1" alias="/controls/door[1]"/>
+			<float n="2" alias="/controls/door[2]"/>
 		</generic>
 	</multiplay>
 	<menubar include="Dialogs/C-101EB-menu.xml"/>
@@ -49,6 +59,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	<C-101>
 		<file>Aircraft/C-101/Nasal/Liveries-C-101EB.nas</file>
 	</C-101>
+	<canvas_test>
+		<file>Aircraft/C-101/Models/Canvas_NAV1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_COM1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_N1.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_N2.nas</file>
+		<file>Aircraft/C-101/Models/Canvas_ITT.nas</file>
+	</canvas_test>
 </nasal>
 
 <input>
