@@ -83092,7 +83092,7 @@ refs 4
 212 0.959038 0.603421
 kids 0
 OBJECT poly
-name "volume"
+name "volumeNAV1"
 loc -0.0440149 -0.0273118 0.137803
 texture "C101_cockpit_INT.png"
 crease 45.000000
@@ -84678,7 +84678,7 @@ refs 4
 3 0.671033 0.856463
 kids 0
 OBJECT poly
-name "volume"
+name "volumeTACAN"
 loc 0.388749 -0.0057565 -0.0102507
 texture "C101_cockpit_INT.png"
 crease 45.000000
@@ -93708,7 +93708,7 @@ loc -0.622747 -0.250822 0.18147
 folded
 kids 6
 OBJECT poly
-name "volume"
+name "volumeCOM1"
 loc 0.729204 0.0962602 -0.0848728
 texture "C101_cockpit_INT.png"
 crease 45.000000

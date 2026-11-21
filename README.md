@@ -1,12 +1,4 @@
-# CASA C-101 Aviojet — Valhalla Edition
-
-##### Two-seat jet trainer / light attack aircraft for FlightGear — Valhalla Edition fork.
-
-[![FlightGear](https://img.shields.io/badge/FlightGear-2020.3%2B%20%2F%202024.1-blue.svg)]()
-[![FDM](https://img.shields.io/badge/FDM-JSBSim-green.svg)]()
-[![License](https://img.shields.io/badge/License-GPL--3.0-red.svg)]()
-
-> **Valhalla Edition** — fork of FGMEMBERS/C-101 maintained under **Projeto Valhalla** (ala NEXUS).
+# CASA C-101 Aviojet — FlightGear
 
 Two-seat jet trainer / light attack aircraft built by CASA (Construcciones Aeronáuticas S.A.).
 This package contains three variants sharing one airframe model and one JSBSim flight model,
@@ -53,6 +45,40 @@ across the three variants.
 | `l` | landing lights |
 | `Ctrl` + `b` | speedbrake |
 
+### Mouse in the 3D cockpit
+
+In the internal (cockpit) view, with the mouse in **Normal** mode (`Tab` cycles the mouse modes),
+the following controls can be clicked:
+
+| Control | Action |
+|---|---|
+| Landing gear lever knob | left click toggles gear up/down |
+| Parking brake handle | left click toggles the parking brake |
+| Flaps lever / DOWN placard | left click lowers the flaps one notch |
+| Flaps UP placard | left click raises the flaps one notch |
+| Canopy lever (left side wall) | left click opens/closes the canopy (lever animates) |
+| Copilot canopy lever tip (right side) | left click opens/closes the rear canopy (lever animates) |
+| Altimeter pressure knob (QNH) | scroll / drag / click — sets altimeter 28–31 inHg (drums + knob follow) |
+| HSI Course / OBS knob | scroll / drag / click — sets nav[0] radial 0–360° (wraps, knob turns) |
+| Heading bug knob (HSI) | scroll / drag / click — sets AP heading bug 0–360° (wraps, knob turns) |
+| COM1 volume knob | scroll / drag / click — COM1 audio 0–100% (knob turns) |
+| NAV1 volume knob | scroll / drag / click — NAV1 ident audio 0–100% (knob turns) |
+| Pitch trim wheel | scroll / drag / click — elevator trim –100%…+100% (wheel turns) |
+| Position lights switch (RHS panel) | left click toggles nav lights (switch flips) |
+| Anti-collision beacon switch (RHS) | left click toggles beacon (switch flips) |
+| Formation lights switch (RHS) | left click toggles formation lights (switch flips) |
+
+Hovering a control shows its current state (tooltip).
+
+The right mouse button is not used: FlightGear 2024.1 reserves it for the spring-loaded
+look mode, so right clicks never reach the cockpit hotspots.
+
+Rotary knobs are `<type>knob</type>` animations: **mouse wheel** adjusts in both directions
+(up = increase, down = decrease), left click / hold increases, middle click decreases,
+and dragging the knob also turns it. Switches and levers use a single left click to toggle.
+The airbrake has no dedicated lever in the cockpit model — use `Ctrl` + `b`.
+
+
 ### Aircraft menu (BB / CC)
 
 * **Aircraft lights**
@@ -90,16 +116,8 @@ Set files:
   `Models/Armament/DEFA553/null.ac`.
 * BB/CC use the EB aero model, so performance differences come only from the engine definition.
 
-## Development
-
-- **Roadmap:** See [ROADMAP.md](ROADMAP.md)
-- **Changelog:** See [CHANGELOG.md](CHANGELOG.md)
-- **Design docs:** Obsidian Vault `Valhalla/Nexus/` (Projeto Valhalla)
-- **Upstream:** https://github.com/FGMEMBERS/C-101
-
 ## Credits
 
-* **Valhalla Edition fork** — **Killed J3ff** (Projeto Valhalla — NEXUS)
 * **Original aircraft, flight model, models and liveries (2011–2013)** —
   Pavel Cueto, Fernando Espinosa
 * **2020 external model and cockpit update** — John Bray ("Warty")

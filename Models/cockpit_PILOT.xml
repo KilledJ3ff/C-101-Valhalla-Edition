@@ -322,31 +322,33 @@
   <axis><y>-1</y></axis>
  </animation>
  
+<!-- Kollsman window drums. FlightGear only maintains setting-inhg, so the
+       drums are driven by it; the old factors were degrees per hPa, now
+       scaled by 33.8639 (hPa per inHg): 36 -> 1219.1 deg/inHg, etc. -->
 <animation><type>rotate</type><object-name>hpaUnits</object-name>
-  <property>instrumentation/altimeter/setting-hpa</property>
-  <factor>36</factor>
+  <property>instrumentation/altimeter/setting-inhg</property>
+  <factor>1219.104</factor>
   <center><x-m>-4.019</x-m><!-- back --><z-m> 0.124</z-m><!-- up --></center> 
   <axis><y>-1</y></axis>
  </animation> 
  <animation><type>rotate</type><object-name>hpaTens</object-name>
-  <property>instrumentation/altimeter/setting-hpa</property>
-  <factor>3.6</factor>
+  <property>instrumentation/altimeter/setting-inhg</property>
+  <factor>121.9104</factor>
   <center><x-m>-4.019</x-m><!-- back --><z-m> 0.124</z-m><!-- up --></center> 
   <axis><y>-1</y></axis>
  </animation> 
  <animation><type>rotate</type><object-name>hpaHundreds</object-name>
-  <property>instrumentation/altimeter/setting-hpa</property>
-  <factor>0.36</factor>
+  <property>instrumentation/altimeter/setting-inhg</property>
+  <factor>12.19104</factor>
   <center><x-m>-4.019</x-m><!-- back --><z-m> 0.124</z-m><!-- up --></center> 
   <axis><y>-1</y></axis>
  </animation> 
  <animation><type>rotate</type><object-name>hpaThousands</object-name>
-  <property>instrumentation/altimeter/setting-hpa</property>
-  <factor>0.036</factor>
+  <property>instrumentation/altimeter/setting-inhg</property>
+  <factor>1.219104</factor>
   <center><x-m>-4.019</x-m><!-- back --><z-m> 0.124</z-m><!-- up --></center> 
   <axis><y>-1</y></axis>
  </animation>
-  <!-- to do: baroUp baroDown knobBaroSetting -->
  
 <!--                                                END OF Altimeter Needles and drums -->
 <!-- ================================================================== RMI - ADF+NAV1 -->
@@ -648,8 +650,19 @@
       <z-m> 0.039</z-m>
     </center> 
     <axis><y>1</y></axis>
-  </animation> 
-  
+  </animation>
+
+  <!-- handleStbd: copilot canopy lever tip, mirrors the left handle (door[1]) -->
+  <animation> <type>rotate</type><object-name>handleStbd</object-name>
+  <property>controls/door[1]</property>
+    <factor>88</factor>
+    <center>
+      <x-m>-3.908</x-m>
+      <z-m> 0.081</z-m>
+    </center>
+    <axis><y>1</y></axis>
+  </animation>
+
   <animation><type>rotate</type>
     <object-name>cockpitFrontFrameInt</object-name>
     <property>controls/door[0]</property>    
@@ -683,6 +696,17 @@
     <center><x-m>-4.024</x-m><z-m>-0.040</z-m></center> 
     <axis><y>1</y></axis>
   </animation> 
+  <!-- Flap lever: slides along the slot between the UP and DOWN placards.
+       flap-pos is 0.00 (UP) / 0.40 (T.O.) / 1.00 (DOWN), see C-101-base.xml. -->
+  <animation><type>translate</type><object-name>flapLever</object-name>
+    <property>/controls/flight/flaps</property>
+    <axis><x>1</x></axis>
+    <interpolation>
+      <entry><ind>0.00</ind><dep>-0.013</dep></entry>
+      <entry><ind>0.40</ind><dep> 0.000</dep></entry>
+      <entry><ind>1.00</ind><dep> 0.013</dep></entry>
+    </interpolation>
+  </animation>
   
    <animation> <type>rotate</type><object-name>stick</object-name>
      <property>/controls/flight/aileron</property><factor>20</factor>
@@ -695,6 +719,447 @@
     <axis><y>-1</y></axis>
   </animation> 
   
+<!-- ================================================= LIGHT SWITCHES -->
+<!-- Each switch is one group (grommet + toggle + hex), so rotating the group
+     about the base of the lever tips the whole switch. The centre uses model
+     coordinates; only x and z matter for a rotation about the lateral axis. -->
+  <animation><type>rotate</type><object-name>switchPosition</object-name>
+    <property>/controls/lighting/nav-lights</property>
+    <factor>35</factor>
+    <center><x-m>-3.8652</x-m><y-m>0.3617</y-m><z-m>-0.1480</z-m></center>
+    <axis><y>1</y></axis>
+  </animation>
+
+  <animation><type>rotate</type><object-name>switchAntiCol</object-name>
+    <property>/controls/lighting/beacon</property>
+    <factor>35</factor>
+    <center><x-m>-3.8959</x-m><y-m>0.3384</y-m><z-m>-0.1521</z-m></center>
+    <axis><y>1</y></axis>
+  </animation>
+
+  <animation><type>rotate</type><object-name>switchFormation</object-name>
+    <property>/controls/lighting/formation_lighting</property>
+    <factor>35</factor>
+    <center><x-m>-3.8303</x-m><y-m>0.3616</y-m><z-m>-0.1480</z-m></center>
+    <axis><y>1</y></axis>
+  </animation>
+
+  <!-- ================================================= MOUSE CLICKABLE CONTROLS -->
+<!-- These picks must stay after the rotate/translate animations that move the
+     same objects, otherwise the handler is attached before the object moves.
+     All actions use the left button only. -->
+
+  <!-- Landing gear lever -->
+  <animation>
+    <type>pick</type>
+    <object-name>landingGearKnob</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>controls.gearToggle();</script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-gear-lever</tooltip-id>
+        <label>Landing gear: %s (click to toggle)</label>
+        <property>/controls/gear/gear-down</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] ? 'DOWN' : 'UP';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Parking brake handle -->
+  <animation>
+    <type>pick</type>
+    <object-name>parkingBrakeHandle</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>controls.parkingBrakeToggle(1);</script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-parking-brake</tooltip-id>
+        <label>Parking brake: %s (click to toggle)</label>
+        <property>/controls/gear/brake-parking</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] ? 'ON' : 'OFF';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Flaps: one notch per click. The lever and the DOWN placard lower the
+       flaps, the UP placard raises them (right-click cannot be used: in
+       FlightGear 2024.1 the right button is reserved for the spring-loaded
+       look mode and never reaches the pick callbacks). -->
+  <animation>
+    <type>pick</type>
+    <object-name>flapLever</object-name>
+    <object-name>flapsDOWN</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>controls.flapsDown(1);</script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-flaps-down</tooltip-id>
+        <label>Flaps: %s (click to lower one notch)</label>
+        <property>/controls/flight/flaps</property>
+        <mapping>nasal</mapping>
+        <script>var f = arg[0]; return f &lt; 0.01 ? 'UP' : (f &lt; 0.7 ? 'TAKEOFF' : 'DOWN');</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>flapsUP</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>controls.flapsDown(-1);</script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-flaps-up</tooltip-id>
+        <label>Flaps: %s (click to raise one notch)</label>
+        <property>/controls/flight/flaps</property>
+        <mapping>nasal</mapping>
+        <script>var f = arg[0]; return f &lt; 0.01 ? 'UP' : (f &lt; 0.7 ? 'TAKEOFF' : 'DOWN');</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Canopy lever: same action as the 'd' key (controls/door[0]) -->
+  <animation>
+    <type>pick</type>
+    <object-name>knobCanopyLever</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>
+          if (getprop("controls/door[0]") &gt; 0.5) {
+            interpolate("controls/door[0]", 0, 2);
+          } else {
+            interpolate("controls/door[0]", 1, 2);
+          }
+        </script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-canopy</tooltip-id>
+        <label>Canopy: %s (click to open/close)</label>
+        <property>/controls/door[0]</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] &gt; 0.5 ? 'OPEN' : 'CLOSED';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Copilot canopy lever tip (handleStbd). Same action as the 'D' key (controls/door[1]). -->
+  <animation>
+    <type>pick</type>
+    <object-name>handleStbd</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script>
+          if (getprop("controls/door[1]") &gt; 0.5) {
+            interpolate("controls/door[1]", 0, 2);
+          } else {
+            interpolate("controls/door[1]", 1, 2);
+          }
+        </script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-canopy-right</tooltip-id>
+        <label>Copilot canopy: %s (click to open/close)</label>
+        <property>/controls/door[1]</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] &gt; 0.5 ? 'OPEN' : 'CLOSED';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Altimeter pressure knob (QNH). Turning it only changes the baro
+       setting; the Kollsman drums follow instrumentation/altimeter/setting-inhg. -->
+  <animation>
+    <type>knob</type>
+    <object-name>knobBaroSetting</object-name>
+    <property>instrumentation/altimeter/setting-inhg</property>
+    <factor>60</factor>
+    <offset-deg>-1680</offset-deg>
+    <center><x-m>-3.99588</x-m><y-m>0.06919</y-m><z-m>0.10515</z-m></center>
+    <axis><x>1</x><y>0</y><z>0</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>instrumentation/altimeter/setting-inhg</property>
+        <factor type="double">0.03</factor>
+        <min>28.0</min>
+        <max>31.0</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-qnh</tooltip-id>
+        <label>QNH: %s (scroll/click to set)</label>
+        <property>instrumentation/altimeter/setting-inhg</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%.0f hPa / %.2f inHg", arg[0] * 33.8639, arg[0]);</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- HSI course (OBS) knob -->
+  <animation>
+    <type>knob</type>
+    <object-name>knob_CourseSelect_OBS</object-name>
+    <property>/instrumentation/nav[0]/radials/selected-deg</property>
+    <factor>1</factor>
+    <center><x-m>-4.00781</x-m><y-m>-0.01028</y-m><z-m>-0.07861</z-m></center>
+    <axis><x>1</x><y>0</y><z>0</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/instrumentation/nav[0]/radials/selected-deg</property>
+        <factor type="double">1</factor>
+        <min>0</min>
+        <max>360</max>
+        <wrap>true</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-obs</tooltip-id>
+        <label>OBS: %s (scroll/click to turn)</label>
+        <property>/instrumentation/nav[0]/radials/selected-deg</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%03.0f deg", arg[0]);</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- HSI heading bug knob -->
+  <animation>
+    <type>knob</type>
+    <object-name>knob_HeadingSelect</object-name>
+    <property>/autopilot/settings/heading-bug-deg</property>
+    <factor>1</factor>
+    <center><x-m>-4.00781</x-m><y-m>0.01951</y-m><z-m>-0.07861</z-m></center>
+    <axis><x>1</x><y>0</y><z>0</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/autopilot/settings/heading-bug-deg</property>
+        <factor type="double">1</factor>
+        <min>0</min>
+        <max>360</max>
+        <wrap>true</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-heading-bug</tooltip-id>
+        <label>Heading bug: %s (scroll/click to turn)</label>
+        <property>/autopilot/settings/heading-bug-deg</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%03.0f deg", arg[0]);</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Radio volume knobs (COM1 and NAV1 radios). TACAN has no audio path in
+       FlightGear, so its knob is left alone. -->
+  <animation>
+    <type>knob</type>
+    <object-name>volumeCOM1</object-name>
+    <property>/instrumentation/comm[0]/volume</property>
+    <factor>180</factor>
+    <center><x-m>-3.64659</x-m><y-m>0.1905</y-m><z-m>-0.19176</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/instrumentation/comm[0]/volume</property>
+        <factor type="double">0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-com1-volume</tooltip-id>
+        <label>COM1 volume: %s (scroll/click to turn)</label>
+        <property>/instrumentation/comm[0]/volume</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%.0f%%", arg[0] * 100);</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>knob</type>
+    <object-name>volumeNAV1</object-name>
+    <property>/instrumentation/nav[0]/volume</property>
+    <factor>180</factor>
+    <center><x-m>-3.84573</x-m><y-m>0.18891</y-m><z-m>-0.19204</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/instrumentation/nav[0]/volume</property>
+        <factor type="double">0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-nav1-volume</tooltip-id>
+        <label>NAV1 volume: %s (scroll/click to turn)</label>
+        <property>/instrumentation/nav[0]/volume</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%.0f%%", arg[0] * 100);</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Pitch trim wheel -->
+  <animation>
+    <type>knob</type>
+    <object-name>trim</object-name>
+    <property>/controls/flight/elevator-trim</property>
+    <factor>90</factor>
+    <center><x-m>-4.00368</x-m><y-m>-0.22075</y-m><z-m>0.13949</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/flight/elevator-trim</property>
+        <factor type="double">0.02</factor>
+        <min>-1</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-pitch-trim</tooltip-id>
+        <label>Pitch trim: %s (scroll/click to adjust)</label>
+        <property>/controls/flight/elevator-trim</property>
+        <mapping>nasal</mapping>
+        <script>return sprintf("%+.0f%% nose %s", arg[0] * 100, arg[0] &gt; 0 ? 'down' : (arg[0] &lt; 0 ? 'up' : 'trim'));</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <!-- Lighting switches -->
+  <animation>
+    <type>pick</type>
+    <object-name>switchPosition</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>/controls/lighting/nav-lights</property>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-nav-lights</tooltip-id>
+        <label>Position lights: %s (click to toggle)</label>
+        <property>/controls/lighting/nav-lights</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] ? 'ON' : 'OFF';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>switchAntiCol</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>/controls/lighting/beacon</property>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-beacon</tooltip-id>
+        <label>Anti-collision beacon: %s (click to toggle)</label>
+        <property>/controls/lighting/beacon</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] ? 'ON' : 'OFF';</script>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>switchFormation</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>/controls/lighting/formation_lighting</property>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>c101-formation-lights</tooltip-id>
+        <label>Formation lights: %s (click to toggle)</label>
+        <property>/controls/lighting/formation_lighting</property>
+        <mapping>nasal</mapping>
+        <script>return arg[0] ? 'ON' : 'OFF';</script>
+      </binding>
+    </hovered>
+  </animation>
+
    <effect><!-- SHADERS -->
 	<inherits-from>Aircraft/C-101/Models/Effects/reflect_glass</inherits-from>
 		<object-name>Instrument_glass</object-name>

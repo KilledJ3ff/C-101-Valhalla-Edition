@@ -5,6 +5,20 @@
 
 ---
 
+## [2026-11-19] — 3D cockpit mouse interaction
+
+### Added
+- **Clickable 3D cockpit controls** (`Models/cockpit_PILOT.xml`, +479 lines): landing gear lever, parking brake, flaps lever/placards, canopy levers (front & rear), altimeter QNH knob (28–31 inHg), HSI course/OBS knob, heading bug knob, COM1/NAV1 volume knobs, pitch trim wheel, nav/beacon/formation light switches
+- Rotary knobs as `<type>knob</type>` animations: mouse wheel both directions, left click/hold increases, middle click decreases, drag turns
+- Hover tooltips showing current state of each control
+- README: new "Mouse in the 3D cockpit" section documenting all clickable controls
+
+### Fixed
+- `Models/cockpit_INT_FG.ac` minor adjustments
+- VLH liveries (CC): line-ending normalization
+
+---
+
 ## [Valhalla Edition — 2026 merged build]
 
 ### Added
